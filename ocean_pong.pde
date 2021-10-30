@@ -13,18 +13,17 @@ AudioPlayer gameovermusic;
 
 
 //defining global variables
+  int score = 0; //**********************************
+
 float x, y, speedX, speedY;
-float diam = 10;
 float rectSize = 200;
-//float diamHit;
 PImage bg;
 PImage img;
-int z;
 color[] rainbow = {#FFFEFF, #F2BB77, #F2DD72, #F27329, #F22929};
-//color[] rainbow = {#049DD9, #0378A6, #05C7F2, #04B2D9, #05DBF2};
 PFont font;
 
-//-------------------------------------------------------------------------------------
+
+//----------------------------------------SETUP----------------------------------------
 
 
 void setup() {
@@ -33,7 +32,6 @@ void setup() {
   fill(255);
   noStroke();
   imageMode(CENTER);
- 
   bg = loadImage("waterbackground.jpg");
   reset();
  
@@ -44,7 +42,7 @@ void setup() {
   underthesea.play();
 }
 
-//-------------------------------------------------------------------------------------
+//---------------------------------------RESET------------------------------------------
 
 
 void reset() {
@@ -56,9 +54,9 @@ void reset() {
   speedY = random(5, 5);
 }
 
-//-------------------------------------------------------------------------------------
+//----------------------------------------DRAW------------------------------------------
 
-void draw() { 
+void draw() {
  
   background(bg);
   img = loadImage("plastic.png");
@@ -71,6 +69,9 @@ void draw() {
   x += speedX;
   y += speedY;
 
+//score**************************************
+   if ( x > width-30 && x < width -20 && y > mouseY-rectSize/2 && y < mouseY+rectSize/2 ) {
+    score = score + 1; }
 
   // if plastic ball hits movable bar, invert X direction
   if ( x > width-30 && x < width -20 && y > mouseY-rectSize/2 && y < mouseY+rectSize/2 ) {
@@ -78,11 +79,10 @@ void draw() {
     x = x + speedX;
     fill(rainbow[int(random(0, 5))]); //changes to random colour from array
 
-
-    //ellipse(x, y, diamHit, diamHit);
-    rectSize = rectSize-10;
+    //shrinks movable bar everytime plastic ball hits
+    rectSize = rectSize-5;
     rectSize = constrain(rectSize, 10, 150);
-  } 
+  }
 
 
   // if plastic hits wall, change direction of X
@@ -106,13 +106,20 @@ void draw() {
   image(img, 870, 250);
   image(img, 870, 400);
 
+
+  //score text *********************************
+  font = loadFont("phos.vlw");
+  textFont(font);  
+  text(score, 60, 60);
+
+
 //text
   String s = "Stop the rubbish from getting to the fish!";
   font = loadFont("phos20.vlw");
   textFont(font);
   text(s, 270, 20, 100);  // Text wraps within text box
-   
-   
+  
+  
 //Game Over Screen
   if (x > 1500) {
     font = loadFont("phos.vlw");
@@ -121,14 +128,13 @@ void draw() {
     fill(#d64956);
     textSize(60);
     text("GAME OVER", width / 2 - 160, 80);
-    
 
     textSize(18);
-    text("Click To Restart", 760, 480);
+    text("Click To Restart", 760, 490);
   
-    textSize(45);
+    textSize(60);
     fill(#6abab0);
-    text("Keep our sea plastic free!", 185, 430);
+    text("Keep our sea plastic free!", 85, 460);
     
     img = loadImage("deadfish.jpg");
     image(img, width/2, 250);
@@ -143,7 +149,7 @@ void draw() {
   
   }
   
-//-------------------------------------------------------------------------------------
+//----------------------------------MOUSE PRESSED---------------------------------------
 
 //reset game when mouse pressed
 void mousePressed() {
@@ -164,7 +170,7 @@ void mousePressed() {
 }
 
 
-//-------------------------------------------------------------------------------------
+//---------------------------------------KEY PRESSED-----------------------------------
 
 //pause music when key pressed
 void keyPressed() {
